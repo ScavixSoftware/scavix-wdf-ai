@@ -1,0 +1,19 @@
+{
+	"name": "scavix-wdf/ai",
+	"version": "2025.9.0",
+	"description": "AI components",
+	"type": "library",
+	"license": "LGPL-3.0-or-later",
+	"autoload": {
+		"files": [
+			"bootstrap.php"
+		]
+	},
+	"require": {
+		"scavix-wdf/core": "^2025.9.0"
+	},
+    "suggest":
+    {
+        "google/cloud-ai-platform": "If you plan to use Google AI"
+    }
+}
