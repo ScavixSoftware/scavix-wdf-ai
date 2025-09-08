@@ -1,5 +1,5 @@
 {
-	"name": "scavix-wdf/ai",
+	"name": "scavix/wdf-ai",
 	"version": "2025.9.0",
 	"description": "AI components",
 	"type": "library",
@@ -10,7 +10,7 @@
 		]
 	},
 	"require": {
-		"scavix-wdf/core": "^2025.9.0"
+		"scavix/wdf-core": "^2025.9.0"
 	},
     "suggest":
     {
