@@ -1,6 +1,6 @@
 {
 	"name": "scavix/wdf-ai",
-	"version": "2025.9.0",
+	"version": "1.0.0",
 	"description": "AI components",
 	"type": "library",
 	"license": "LGPL-3.0-or-later",
@@ -10,7 +10,7 @@
 		]
 	},
 	"require": {
-		"scavix/wdf-core": "^2025.9.0"
+		"scavix/wdf-core": "^1.0.0"
 	},
     "suggest":
     {
