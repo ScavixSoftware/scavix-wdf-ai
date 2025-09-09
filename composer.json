@@ -1,19 +1,17 @@
 {
-	"name": "scavix/wdf-ai",
-	"version": "1.0.0",
-	"description": "AI components",
-	"type": "library",
-	"license": "LGPL-3.0-or-later",
-	"autoload": {
-		"files": [
-			"bootstrap.php"
-		]
-	},
-	"require": {
-		"scavix/wdf-core": "^1.0.0"
-	},
-    "suggest":
-    {
-        "google/cloud-ai-platform": "If you plan to use Google AI"
-    }
+  "name": "scavix/wdf-ai",
+  "description": "AI components",
+  "type": "library",
+  "license": "LGPL-3.0-or-later",
+  "autoload": {
+    "files": [
+      "bootstrap.php"
+    ]
+  },
+  "require": {
+    "scavix/wdf-core": "^1.0.0"
+  },
+  "suggest": {
+    "google/cloud-ai-platform": "If you plan to use Google AI"
+  }
 }
