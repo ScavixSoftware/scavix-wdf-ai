@@ -4,8 +4,9 @@ This is a package for the Scavix Software Web Development Framework.
 It contains logic to use AI prediction.
 
 Installation
-============
-Install the package with `composer require scavix/wdf-ai`, then install your AI engine connector.
-Currently supported engines:
+------------
+Install the package with `composer require {{name}}`, then install your AI engine connector.
 
-* GoogleAI: `composer require google/cloud-ai-platform`
+Suggested engines:
+
+{{suggested}}
