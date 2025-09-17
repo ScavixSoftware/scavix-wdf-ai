@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 1,
+  "version": 2,
   "metadata": {
-    "timestamp": "2025-09-17T07:40:59.852Z",
+    "timestamp": "2025-09-17T08:37:16.624Z",
     "manufacturer": {
       "name": "Scavix Software GmbH & Co. KG",
       "url": [
@@ -12,11 +12,11 @@
     },
     "component": {
       "type": "library",
-      "bom-ref": "pkg:composer/scavix/wdf-ai@1.0.1",
-      "purl": "pkg:composer/scavix/wdf-ai@1.0.1",
+      "bom-ref": "pkg:composer/scavix/wdf-ai@1.0.2",
+      "purl": "pkg:composer/scavix/wdf-ai@1.0.2",
       "group": "scavix",
       "name": "wdf-ai",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "supplier": {
         "name": "Scavix Software GmbH & Co. KG",
         "url": [
@@ -48,11 +48,11 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "pkg:composer/scavix/wdf-ai@1.0.1",
-      "purl": "pkg:composer/scavix/wdf-ai@1.0.1",
+      "bom-ref": "pkg:composer/scavix/wdf-ai@1.0.2",
+      "purl": "pkg:composer/scavix/wdf-ai@1.0.2",
       "group": "scavix",
       "name": "wdf-ai",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "supplier": {
         "name": "Scavix Software GmbH & Co. KG",
         "url": [
@@ -230,7 +230,7 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:composer/scavix/wdf-ai@1.0.1",
+      "ref": "pkg:composer/scavix/wdf-ai@1.0.2",
       "dependsOn": [
         "pkg:composer/scavix/wdf-core@1.0.2"
       ]

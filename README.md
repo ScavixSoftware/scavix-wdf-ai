@@ -5,8 +5,12 @@ It contains logic to use AI prediction.
 
 Installation
 ------------
-Install the package with `composer require {{name}}`, then install your AI engine connector.
+Install the package with `composer require scavix/wdf-ai`, then install your AI engine connector.
 
 Suggested engines:
 
-{{suggested}}
+* google/cloud-ai-platform - If you plan to use Google AI
+
+Dependencies
+------------
+* [scavix/wdf-core (^1.0.2)](https://packagist.org/packages/scavix/wdf-core#v1.0.2)
