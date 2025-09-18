@@ -83,7 +83,7 @@ class WdfGoogleAIWrapper
         global $CONFIG;
         if (isset($CONFIG['ai']['google']))
         {
-            log_warn("Depecated use of AI config in \$CONFIG variable. Use 'WdfAiHandler::GoogleAI()' instead");
+            // log_warn("Depecated use of AI config in \$CONFIG variable. Use 'WdfAIHandler::GoogleAI()' instead");
             $options = array_merge($options, $CONFIG['ai']['google']);
         }
         $options = array_merge($options, $this->config);

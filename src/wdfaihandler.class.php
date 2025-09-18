@@ -25,7 +25,7 @@
 
 use ScavixWDF\WdfException;
 
-class WdfAiHandler
+class WdfAIHandler
 {
     private static $instance = null;
 
@@ -44,7 +44,25 @@ class WdfAiHandler
     public static function Predict($prompt, $options = [], $cache = false)
     {
         if (!self::$instance)
-            WdfException::Raise("WdfAiHandler not initialized");
+        {
+            global $CONFIG;
+            if(!avail($CONFIG, 'ai') || !avail($CONFIG['ai'], 'service'))
+                WdfException::Raise("WdfAIHandler not configured");
+
+            $aihandler = strtolower($CONFIG['ai']['service']);
+            switch($aihandler)
+            {
+                case 'google':
+                    if(!avail($CONFIG['ai'], $aihandler))
+                        WdfException::Raise("WdfAIHandler GoogleAI not configured");
+
+                    self::GoogleAI($CONFIG['ai'][$aihandler]);
+                    break;
+
+                default:
+                    WdfException::Raise("WdfAIHandler unknown system '$aihandler'");
+            }
+        }
         return self::$instance->Predict($prompt, $options, $cache);
     }
 }
