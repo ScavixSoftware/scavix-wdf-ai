@@ -47,7 +47,7 @@ class WdfGoogleAIWrapper
         }
 
          // config contains credentials file
-        if (!$credentials && ($credfile = ifavail($config, 'configfile')) && file_exists($credfile))
+        if (!$credentials && ($credfile = ($config['configfile'] ?? '')) && file_exists($credfile))
         {
             $credentials = json_decode(file_get_contents($credfile), true);
             putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $credfile);
@@ -89,14 +89,14 @@ class WdfGoogleAIWrapper
         $options = array_merge($options, $this->config);
 
         $ret                     = false;
-        $model                   = ifavail($options, 'model') ?: 'text-bison';
+        $model                   = $options['model'] ?? 'text-bison';
         $predictionServiceClient = new \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient(
         [
-            'apiEndpoint' => ifavail($options, 'apiendpoint') ?: 'us-central1-aiplatform.googleapis.com'
+            'apiEndpoint' => $options['apiendpoint'] ?? 'us-central1-aiplatform.googleapis.com'
         ]);
         $gmodel = \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient::projectLocationPublisherModelName(
             $this->credentials['project_id'],
-            ifavail($options, 'location') ?: 'us-central1',
+            $options['location'] ?? 'us-central1',
             'google',
             $model
         );
@@ -171,7 +171,7 @@ class WdfGoogleAIWrapper
             $predictionServiceClient->close();
         }
 
-        // $formattedEndpoint = \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient::projectLocationPublisherModelName($this->gconfig['project_id'], ifavail($CONFIG['ai']['google'], 'location') ?: 'us-central1', 'google', $model);
+        // $formattedEndpoint = \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient::projectLocationPublisherModelName($this->gconfig['project_id'], $CONFIG['ai']['google']['location'] ?? 'us-central1', 'google', $model);
 
         // // Prepare the request message.
         // // $serializer = new \Google\ApiCore\Serializer();
