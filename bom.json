@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 2,
+  "version": 3,
   "metadata": {
-    "timestamp": "2025-09-17T08:37:16.624Z",
+    "timestamp": "2026-01-30T11:12:33.637Z",
     "manufacturer": {
       "name": "Scavix Software GmbH & Co. KG",
       "url": [
@@ -12,11 +12,11 @@
     },
     "component": {
       "type": "library",
-      "bom-ref": "pkg:composer/scavix/wdf-ai@1.0.2",
-      "purl": "pkg:composer/scavix/wdf-ai@1.0.2",
+      "bom-ref": "pkg:composer/scavix/wdf-ai@1.1.0",
+      "purl": "pkg:composer/scavix/wdf-ai@1.1.0",
       "group": "scavix",
       "name": "wdf-ai",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "supplier": {
         "name": "Scavix Software GmbH & Co. KG",
         "url": [
@@ -48,11 +48,11 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "pkg:composer/scavix/wdf-ai@1.0.2",
-      "purl": "pkg:composer/scavix/wdf-ai@1.0.2",
+      "bom-ref": "pkg:composer/scavix/wdf-ai@1.1.0",
+      "purl": "pkg:composer/scavix/wdf-ai@1.1.0",
       "group": "scavix",
       "name": "wdf-ai",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "supplier": {
         "name": "Scavix Software GmbH & Co. KG",
         "url": [
@@ -82,11 +82,11 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:composer/scavix/wdf-core@1.0.2",
-      "purl": "pkg:composer/scavix/wdf-core@1.0.2",
+      "bom-ref": "pkg:composer/scavix/wdf-core@1.1.0",
+      "purl": "pkg:composer/scavix/wdf-core@1.1.0",
       "group": "scavix",
       "name": "wdf-core",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "supplier": {
         "name": "Scavix Software GmbH & Co. KG",
         "url": [
@@ -116,11 +116,11 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:composer/scavix/lessphp@v0.8.1",
-      "purl": "pkg:composer/scavix/lessphp@v0.8.1",
-      "group": "scavix",
-      "name": "lessphp",
-      "version": "v0.8.1",
+      "bom-ref": "pkg:composer/wikimedia/less.php@5.5.0",
+      "purl": "pkg:composer/wikimedia/less.php@5.5.0",
+      "group": "wikimedia",
+      "name": "less.php",
+      "version": "5.5.0",
       "supplier": {
         "name": "Scavix Software GmbH & Co. KG",
         "url": [
@@ -129,23 +129,26 @@
       },
       "authors": [
         {
-          "name": "Leaf Corcoran",
-          "email": "leafot@gmail.com"
+          "name": "Timo Tijhof"
+        },
+        {
+          "name": "Josh Schmidt"
+        },
+        {
+          "name": "Matt Agar"
+        },
+        {
+          "name": "Martin Jantošovič"
         }
       ],
       "licenses": [
         {
           "license": {
-            "id": "MIT"
-          }
-        },
-        {
-          "license": {
-            "id": "GPL-3.0"
+            "id": "Apache-2.0"
           }
         }
       ],
-      "description": "lessphp is a compiler for LESS written in PHP."
+      "description": "PHP port of the LESS processor"
     },
     {
       "type": "library",
@@ -230,21 +233,21 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:composer/scavix/wdf-ai@1.0.2",
+      "ref": "pkg:composer/scavix/wdf-ai@1.1.0",
       "dependsOn": [
-        "pkg:composer/scavix/wdf-core@1.0.2"
+        "pkg:composer/scavix/wdf-core@1.1.0"
       ]
     },
     {
-      "ref": "pkg:composer/scavix/wdf-core@1.0.2",
+      "ref": "pkg:composer/scavix/wdf-core@1.1.0",
       "dependsOn": [
-        "pkg:composer/scavix/lessphp@v0.8.1",
+        "pkg:composer/wikimedia/less.php@5.5.0",
         "external:jQuery@3.7.1",
         "external:jQuery UI@1.14.1"
       ]
     },
     {
-      "ref": "pkg:composer/scavix/lessphp@v0.8.1",
+      "ref": "pkg:composer/wikimedia/less.php@5.5.0",
       "dependsOn": []
     }
   ]
