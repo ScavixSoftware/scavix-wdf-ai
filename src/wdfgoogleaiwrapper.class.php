@@ -218,16 +218,16 @@ class WdfGoogleAIWrapper
         return $ret;
     }
 
-    private function __toprotobuf($key, $value)
-    {
-        if(!self::$serializer)
-        self::$serializer = new \Google\ApiCore\Serializer();
+    // private function __toprotobuf($key, $value)
+    // {
+    //     if(!self::$serializer)
+    //     self::$serializer = new \Google\ApiCore\Serializer();
 
-        $valuetype = 'string_value';
-        if(is_float($value) || is_int($value))
-            $valuetype = 'number_value';
+    //     $valuetype = 'string_value';
+    //     if(is_float($value) || is_int($value))
+    //         $valuetype = 'number_value';
 
-        $struct = self::$serializer->decodeMessage(new \Google\Protobuf\Struct(), ['fields' => [$key => [$valuetype => $value]]]);
-        return new \Google\Protobuf\Value(['struct_value' => $struct]);
-    }
+    //     $struct = self::$serializer->decodeMessage(new \Google\Protobuf\Struct(), ['fields' => [$key => [$valuetype => $value]]]);
+    //     return new \Google\Protobuf\Value(['struct_value' => $struct]);
+    // }
 }
