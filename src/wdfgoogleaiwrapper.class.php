@@ -23,6 +23,8 @@
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  */
 
+use Google\ApiCore\ApiException;
+
 /**
  * @internal Wrapper class for Google AI
  * @link https://cloud.google.com/php/docs/reference/cloud-ai-platform/latest
@@ -33,7 +35,7 @@ class WdfGoogleAIWrapper
     private $credentials;
     private $config = [];
 
-    private static $serializer = false;
+    // private static $serializer = false;
 
     function __construct($config)
     {
@@ -80,129 +82,120 @@ class WdfGoogleAIWrapper
                 return $v;
         }
 
-        global $CONFIG;
-        if (isset($CONFIG['ai']['google']))
+        try
         {
-            // log_warn("Depecated use of AI config in \$CONFIG variable. Use 'WdfAIHandler::GoogleAI()' instead");
-            $options = array_merge($options, $CONFIG['ai']['google']);
-        }
-        $options = array_merge($options, $this->config);
-
-        $ret                     = false;
-        $model                   = $options['model'] ?? 'text-bison';
-        $predictionServiceClient = new \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient(
-        [
-            'apiEndpoint' => $options['apiendpoint'] ?? 'us-central1-aiplatform.googleapis.com'
-        ]);
-        $gmodel = \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient::projectLocationPublisherModelName(
-            $this->credentials['project_id'],
-            $options['location'] ?? 'us-central1',
-            'google',
-            $model
-        );
-
-        // Prepare the request message.
-        $contentsParts = [
-            'text' => (new \Google\Cloud\AIPlatform\V1\Part())->setText($prompt),
-        ];
-
-        $gconfig  = new \Google\Cloud\AIPlatform\V1\GenerationConfig();
-        $system_instructions = [];
-        foreach($options as $key => $val)
-        {
-            switch(strtolower($key))
+            global $CONFIG;
+            if (isset($CONFIG['ai']['google']))
             {
-                case 'temperature':
-                    $gconfig->setTemperature($val);
-                    break;
-                case 'topk':
-                    $gconfig->setTopK($val);
-                    break;
-                case 'topp':
-                    $gconfig->setTopP($val);
-                    break;
-                case 'candidate_count':
-                    $gconfig->setCandidateCount($val);
-                    break;
-                case 'max_output_tokens':
-                    $gconfig->setMaxOutputTokens($val);
-                    break;
-                case 'stop_sequences':
-                    $gconfig->setStopSequences($val);
-                    break;
-                case 'system_instructions':
-                case 'instructions':
-                    if(is_array($val))
-                        $system_instructions = array_merge($system_instructions, $val);
-                    break;
+                // log_warn("Depecated use of AI config in \$CONFIG variable. Use 'WdfAIHandler::GoogleAI()' instead");
+                $options = array_merge($options, $CONFIG['ai']['google']);
             }
-        }
+            $options = array_merge($options, $this->config);
 
-        if ($system_instructions)
-            $contentsParts['system_instruction'] = (new \Google\Cloud\AIPlatform\V1\Part())->setText(implode('. ', $system_instructions));
+            $ret                     = false;
+            $model                   = $options['model'] ?? 'text-bison';
+            $serviceclientoptions = [
+                'apiEndpoint' => $options['apiendpoint'] ?? 'us-central1-aiplatform.googleapis.com'
+            ];
+            if($loggerclass = ifavail($options, 'psrlogger'))
+            {
+                // putenv('GOOGLE_SDK_PHP_LOGGING=true');
+                try
+                {
+                    $logger = new $loggerclass();
+                    $serviceclientoptions['logger'] = $logger;
+                }
+                catch (Exception $ex)
+                {
+                    if (isDev())
+                        log_error($ex);
+                }
+            }
+            $predictionServiceClient = new \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient($serviceclientoptions);
+            $gmodel = \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient::projectLocationPublisherModelName(
+                $this->credentials['project_id'],
+                $options['location'] ?? 'us-central1',
+                'google',
+                $model
+            );
 
-        $content = (new \Google\Cloud\AIPlatform\V1\Content())
-            ->setParts($contentsParts)
-            ->setRole('user');
-        $contents = [$content];
-        $request = new \Google\Cloud\AIPlatform\V1\GenerateContentRequest();
-        $request
-            ->setModel($gmodel)
-            ->setContents($contents)
-            ->setGenerationConfig($gconfig);
+            // Prepare the request message.
+            $contentsParts = [
+                'text' => (new \Google\Cloud\AIPlatform\V1\Part())->setText($prompt),
+            ];
 
-        try {
-            $stream = $predictionServiceClient->streamGenerateContent($request);
-            foreach ($stream->readAll() as $element) {
-                foreach ($element->getCandidates() as $candidate) {
-                    $content = $candidate->getContent();
-                    if ($content) {
-                        foreach ($candidate->getContent()->getParts() as $part) {
+            $gconfig  = new \Google\Cloud\AIPlatform\V1\GenerationConfig();
+            $system_instructions = [];
+            foreach($options as $key => $val)
+            {
+                switch(strtolower($key))
+                {
+                    case 'temperature':
+                        $gconfig->setTemperature($val);
+                        break;
+                    case 'topk':
+                        $gconfig->setTopK($val);
+                        break;
+                    case 'topp':
+                        $gconfig->setTopP($val);
+                        break;
+                    case 'candidate_count':
+                        $gconfig->setCandidateCount($val);
+                        break;
+                    case 'max_output_tokens':
+                        $gconfig->setMaxOutputTokens($val);
+                        break;
+                    case 'stop_sequences':
+                        $gconfig->setStopSequences($val);
+                        break;
+                    case 'system_instructions':
+                    case 'instructions':
+                        if(is_array($val))
+                            $system_instructions = array_merge($system_instructions, $val);
+                        break;
+                }
+            }
+
+            if ($system_instructions)
+                $contentsParts['system_instruction'] = (new \Google\Cloud\AIPlatform\V1\Part())->setText(implode('. ', $system_instructions));
+
+            $content = (new \Google\Cloud\AIPlatform\V1\Content())
+                ->setParts($contentsParts)
+                ->setRole('user');
+            $contents = [$content];
+            $request = new \Google\Cloud\AIPlatform\V1\GenerateContentRequest();
+            $request
+                ->setModel($gmodel)
+                ->setContents($contents)
+                ->setGenerationConfig($gconfig);
+
+            try {
+                $response = $predictionServiceClient->generateContent($request);
+                // log_debug($response->serializeToJsonString());
+                foreach($response->getCandidates() as $candidate)
+                {
+                    if ($content = $candidate->getContent())
+                    {
+                        foreach ($content->getParts() as $part)
+                        {
                             if ($ret === false)
                                 $ret = '';
                             $ret .= $part->getText();
                         }
                     }
                 }
+            } catch (\Exception $e) {
+                log_error($e);;
+            } finally {
+                $predictionServiceClient->close();
             }
-        } catch (\Exception $e) {
-            log_error($e);;
-        } finally {
-            $predictionServiceClient->close();
         }
-
-        // $formattedEndpoint = \Google\Cloud\AIPlatform\V1\Client\PredictionServiceClient::projectLocationPublisherModelName($this->gconfig['project_id'], $CONFIG['ai']['google']['location'] ?? 'us-central1', 'google', $model);
-
-        // // Prepare the request message.
-        // // $serializer = new \Google\ApiCore\Serializer();
-        // // $struct = $serializer->decodeMessage(new \Google\Protobuf\Struct(), ['fields' => ['prompt' => ['string_value' => $prompt]]]);
-        // // $instances = [new \Google\Protobuf\Value(['struct_value' => $struct])];
-        // $request = (new \Google\Cloud\AIPlatform\V1\PredictRequest())
-        //     ->setEndpoint($formattedEndpoint)
-        //     ->setInstances([$this->__toprotobuf('prompt', $prompt)]);
-
-        // foreach($options as $key => $value)
-        //     $request->setParameters($this->__toprotobuf($key, $value));
-
-        // // log_debug('request', $request->serializeToJsonString());
-
-        // // Call the API and handle any network failures.
-        // try {
-        //     /** @var \Google\Cloud\AIPlatform\V1\PredictResponse $response */
-        //     $response = $predictionServiceClient->predict($request);
-        //     foreach ($response->getPredictions() as $r)
-        //     {
-        //         $d = json_decode($r->serializeToJsonString(), true);
-        //         if (avail($d, 'content'))
-        //         {
-        //             $ret = trim($d['content']);
-        //             break;
-        //         }
-        //     }
-        //     // log_debug('Response data', $response->serializeToJsonString());
-        // } catch (\Google\ApiCore\ApiException $ex) {
-        //     log_error('Call failed with message:', $ex->getMessage());
-        // }
+        catch(ApiException $ex)
+        {
+            log_error("Exception", $ex);
+            if($ex->getStatus() === 'RESOURCE_EXHAUSTED')
+                return 'RESOURCE_EXHAUSTED';
+        }
 
         if(isDev())
             log_debug(__METHOD__, $prompt, $options, $ret);
@@ -217,17 +210,4 @@ class WdfGoogleAIWrapper
 
         return $ret;
     }
-
-    // private function __toprotobuf($key, $value)
-    // {
-    //     if(!self::$serializer)
-    //     self::$serializer = new \Google\ApiCore\Serializer();
-
-    //     $valuetype = 'string_value';
-    //     if(is_float($value) || is_int($value))
-    //         $valuetype = 'number_value';
-
-    //     $struct = self::$serializer->decodeMessage(new \Google\Protobuf\Struct(), ['fields' => [$key => [$valuetype => $value]]]);
-    //     return new \Google\Protobuf\Value(['struct_value' => $struct]);
-    // }
 }
