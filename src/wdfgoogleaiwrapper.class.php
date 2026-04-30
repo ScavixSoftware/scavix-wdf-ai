@@ -39,6 +39,8 @@ class WdfGoogleAIWrapper
 
     function __construct($config)
     {
+        if( !class_exists("\\Google\\Cloud\\AIPlatform\\V1\\Client\\PredictionServiceClient") )
+            WdfException::Raise("Missing Google AI client, see https://github.com/googleapis/google-cloud-php-ai-platform");
         $credentials = false;
 
         if (is_string($config) && file_exists($config)) // config is credentials file only

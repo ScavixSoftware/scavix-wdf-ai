@@ -32,9 +32,6 @@ ScavixWDF\Wdf::RegisterPackage('ai', 'ai_init');
  */
 function ai_init()
 {
-    if( !class_exists("\\Google\\Cloud\\AIPlatform\\V1\\Client\\PredictionServiceClient") )
-        WdfException::Raise("Missing Google AI client, see https://github.com/googleapis/google-cloud-php-ai-platform");
-
     classpath_add(__DIR__ . '/src', true, 'system');
 }
 
